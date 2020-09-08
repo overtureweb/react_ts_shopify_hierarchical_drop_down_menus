@@ -47,7 +47,7 @@ const App: React.FC<Props> = ({fields}) => {
     useEffect(() => {
         const setOptions = () => {
             if (!productList) return;
-            const optionsEls = [...(new Set(productList.map((obj: Product) => obj[fields[0]]))) as Set<number>].map((value, i): JSX.Element =>
+            const optionsEls = [...new Set(productList.map((obj: Product) => obj[fields[0]])) as Set<number>].map((value, i): JSX.Element =>
                 <option key={`owd${i}`}>{value}</option>);
             setOptionLists([optionsEls, [], []])
         }
@@ -64,25 +64,24 @@ const App: React.FC<Props> = ({fields}) => {
             return prevState.fill("select", nextIndex);
         });
 
-        //update applied filters
+        //update applied filters - store the user-selected option in the appliedFilters ref object
         appliedFilters.current = {...appliedFilters.current, [selectField]: value}
 
-        //delete applied filters from i + 1 -> end
+        //delete applied filters - because this is a hierarchical search it's necessary to remove subsequent filters from i + 1 -> end
         for (let i = nextIndex; i < fields.length; i++) {
             delete appliedFilters.current[fields[i]];
         }
 
-        //re-filter products
+        //re-filter products - use the updated appliedFilters to create a new filteredProductList populated with matched items
         filteredProductList.current = productList.filter((product: Product): boolean =>
             Object.entries(appliedFilters.current!).every(([key, value]): boolean => product[key] === value));
-        console.log(appliedFilters.current);
-        //generate new option els
 
+        //generate new options - create new option elements
         setOptionLists((prevState: JSX.Element[]) => {
             if (nextIndex >= fields.length) return [...prevState];
             let prev = prevState.slice(0, nextIndex);
-            const optionsEls = [...(new Set(filteredProductList.current!.map((obj: any) => obj[fields[nextIndex]]))) as Set<number>]
-                .map((value, i): JSX.Element =>
+            const optionsEls = [...new Set(filteredProductList.current!.map((obj: Product) => +obj[fields[nextIndex]])) as Set<number>]
+                .map((value: number, i: number): JSX.Element =>
                     <option key={`owd${i}`}>{value}</option>);
             return [...prev, optionsEls];
         })
@@ -93,7 +92,8 @@ const App: React.FC<Props> = ({fields}) => {
             <div className="form-row justify-content-center">
                 <div className="form-group col-12 col-md-3 col-lg-2">
                     <label className="mr-2" htmlFor="productHeight">Height:</label>
-                    <select value={selected[0]} onChange={handleChange} data-select-field={fields[0]} data-select-index={0}
+                    <select value={selected[0]} onChange={handleChange} data-select-field={fields[0]}
+                            data-select-index={0}
                             id="productHeight"
                             className="form-control selectPet">
                         <option>select</option>
@@ -101,7 +101,8 @@ const App: React.FC<Props> = ({fields}) => {
                 </div>
                 <div className="form-group col-12 col-md-3 col-lg-2">
                     <label className="mr-2" htmlFor="productWidth">Width:</label>
-                    <select value={selected[1]} onChange={handleChange} data-select-field={fields[1]} data-select-index={1}
+                    <select value={selected[1]} onChange={handleChange} data-select-field={fields[1]}
+                            data-select-index={1}
                             id="productWidth"
                             className="form-control selectPet">
                         <option>select</option>
@@ -109,7 +110,8 @@ const App: React.FC<Props> = ({fields}) => {
                 </div>
                 <div className="form-group col-12 col-md-3 col-lg-2">
                     <label className="mr-2" htmlFor="productDepth">Depth:</label>
-                    <select value={selected[2]} onChange={handleChange} data-select-field={fields[2]} data-select-index={2}
+                    <select value={selected[2]} onChange={handleChange} data-select-field={fields[2]}
+                            data-select-index={2}
                             id="productDepth"
                             className="form-control selectPet">
                         <option>select</option>
