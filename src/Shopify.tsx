@@ -14,12 +14,13 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 	const node = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		const ShopifyBuyInit = () => {
-			const client = window.ShopifyBuy.buildClient({
+			const ShopifyBuy = (window as Window).ShopifyBuy
+			const client = ShopifyBuy.buildClient({
 				domain: 'eden-equipment.myshopify.com',
 				storefrontAccessToken: '8f386bb8cf1bc975fc00683937b72d2d',
 			});
 			const shopifyProductId: string = filteredProductList[0].shopifyProductId;
-			window.ShopifyBuy.UI.onReady(client).then(function (ui: any) {
+			ShopifyBuy.UI.onReady(client).then(function (ui: any) {
 				ui.createComponent('product', {
 					id: shopifyProductId,
 					node: node.current,
@@ -93,6 +94,7 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 		}
 
 		const loadShopifyScript = () => {
+			if (window.ShopifyBuy) return ShopifyBuyInit();
 			const scriptURL: string = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
 			const script: HTMLScriptElement = document.createElement('script');
 			script.async = true;
