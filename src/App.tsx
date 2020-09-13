@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef, ChangeEvent, FormEvent} from 'react'
 import Button from 'react-bootstrap/Button';
 import "./App.scss";
 import Shopify from "./Shopify";
+import {v4 as uuidv4} from 'uuid';
+import SelectMenu from "./SelectMenu";
 
 interface iDataSet extends DOMStringMap {
 	selectField: string;
@@ -49,7 +51,7 @@ const App: React.FC<Props> = ({fields}) => {
 		setOptions();
 	}, [productList, fields]);
 
-	const handleChange = ({target: {dataset, value}}: ChangeEvent<HTMLSelectElement>) => {
+	const handleChange = ({target: {dataset, value}}: ChangeEvent<HTMLSelectElement>): void => {
 		const {selectField, selectIndex} = dataset as iDataSet;
 		const currentIndex: number = +selectIndex;
 		const nextIndex: number = +selectIndex + 1;
@@ -82,7 +84,7 @@ const App: React.FC<Props> = ({fields}) => {
 				.map((value: number, i: number): JSX.Element =>
 					<option key={`owd${i}`}>{value}</option>);
 			return [...prev, optionsEls];
-		})
+		});
 	}
 
 	const handleReset = () => {
@@ -99,35 +101,19 @@ const App: React.FC<Props> = ({fields}) => {
 		<>
 			<form onSubmit={handleSubmit} className="hvac__search" id="form">
 				<div className="form-row justify-content-center">
-					<div className="form-group col-12 col-md-3 col-lg-2">
-						<label className="mr-2" htmlFor="productHeight">Height:</label>
-						<select value={selected[0]} onChange={handleChange} data-select-field={fields[0]}
-						        data-select-index={0}
-						        id="productHeight"
-						        className="form-control selectPet">
-							<option>select</option>
-							{optionLists && optionLists[0]}</select>
-					</div>
-					<div className="form-group col-12 col-md-3 col-lg-2">
-						<label className="mr-2" htmlFor="productWidth">Width:</label>
-						<select required value={selected[1]} onChange={handleChange} data-select-field={fields[1]}
-						        data-select-index={1}
-						        id="productWidth"
-						        className="form-control selectPet">
-							<option>select</option>
-							{optionLists && optionLists[1]}</select>
-					</div>
-					<div className="form-group col-12 col-md-3 col-lg-2">
-						<label className="mr-2" htmlFor="productDepth">Depth:</label>
-						<select required value={selected[2]} onChange={handleChange} data-select-field={fields[2]}
-						        data-select-index={2}
-						        id="productDepth"
-						        className="form-control selectPet">
-							<option>select</option>
-							{optionLists && optionLists[2]}</select>
-					</div>
+					{selected.map((el, i) =>
+						<SelectMenu
+							i={i}
+							key={uuidv4()}
+							handleChange={handleChange}
+							fields={fields}
+							selected={selected}
+							optionLists={optionLists}
+						/>
+					)}
 					<div style={{whiteSpace: "nowrap"}} className="col-12 col-md-3 align-self-center pt-3 col-lg-3">
-						<Button disabled={selected.includes("select")} variant="primary" size="lg" className="mr-2" id="submit"
+						<Button disabled={selected.includes("select")} variant="primary" size="lg" className="mr-2"
+						        id="submit"
 						        type="submit">search</Button>
 						<Button onClick={handleReset} variant="warning" size="lg" id="reset" type="reset">reset</Button>
 					</div>
