@@ -99,6 +99,7 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 			const scriptURL: string = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
 			const script: HTMLScriptElement = document.createElement('script');
 			script.async = true;
+			script.defer = true;
 			script.src = scriptURL;
 			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
 			script.addEventListener("load", () => ShopifyBuyInit());
