@@ -22,7 +22,8 @@ const App: React.FC<Props> = ({fields}) => {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [productList, setProductList] = useState();
 	const [optionLists, setOptionLists] = useState();
-	const [selected, setSelected] = useState(["select", "select", "select"]);
+	// need to keep track of the currently selected option, defaults to "select"
+	const [selected, setSelected] = useState(Array(fields.length).fill("select"));
 	const appliedFilters = useRef<AppFil>();
 	const filteredProductList = useRef<Product[]>();
 
@@ -44,6 +45,7 @@ const App: React.FC<Props> = ({fields}) => {
 	useEffect(() => {
 		const setOptions = () => {
 			if (!productList) return;
+			//generate the option list for the first drop-down
 			const optionsEls = [...new Set(productList.map((obj: Product) => obj[fields[0]])) as Set<number>].map((value, i): JSX.Element =>
 				<option key={`owd${i}`}>{value}</option>);
 			setOptionLists([optionsEls, [], []])
@@ -51,8 +53,8 @@ const App: React.FC<Props> = ({fields}) => {
 		setOptions();
 	}, [productList, fields]);
 
-	const handleChange = ({target: {dataset, value}}: ChangeEvent<HTMLSelectElement>): void => {
-		const {selectField, selectIndex} = dataset as iDataSet;
+	const handleChange = ({target: {dataset, value, id}}: ChangeEvent<HTMLSelectElement>): void => {
+		const {selectIndex} = dataset as iDataSet;
 		const currentIndex: number = +selectIndex;
 		const nextIndex: number = +selectIndex + 1;
 
@@ -61,11 +63,12 @@ const App: React.FC<Props> = ({fields}) => {
 
 		setSelected((prevState: string[]) => {
 			prevState[currentIndex] = value;
+			// select menus are hierarchical so when a parent changes, need to set descendents back to default of "select"
 			return prevState.fill("select", nextIndex);
 		});
 
 		//update applied filters - store the user-selected option in the appliedFilters ref object
-		appliedFilters.current = {...appliedFilters.current, [selectField]: value}
+		appliedFilters.current = {...appliedFilters.current, [id]: value}
 
 		//delete applied filters - because this is a hierarchical search it's necessary to remove subsequent filters from i + 1 -> end
 		for (let i = nextIndex; i < fields.length; i++) {
@@ -88,7 +91,9 @@ const App: React.FC<Props> = ({fields}) => {
 	}
 
 	const handleReset = () => {
+		// clear currently selected values which disables the submit button
 		setSelected(["select", "select", "select"]);
+		// resets the submitted status which removes the Shopify component
 		setIsSubmitted(false);
 	}
 
@@ -101,12 +106,12 @@ const App: React.FC<Props> = ({fields}) => {
 		<>
 			<form onSubmit={handleSubmit} className="hvac__search" id="form">
 				<div className="form-row justify-content-center">
-					{selected.map((el, i) =>
+					{fields.map((field, idx) =>
 						<SelectMenu
-							i={i}
+							idx={idx}
 							key={uuidv4()}
 							handleChange={handleChange}
-							fields={fields}
+							field={field}
 							selected={selected}
 							optionLists={optionLists}
 						/>

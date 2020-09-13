@@ -1,26 +1,25 @@
 import React from "react";
 
 type smProps = {
-	i: number;
+	idx: number;
 	selected: string[];
 	optionLists: JSX.Element[];
-	fields: string[];
+	field: string;
 	handleChange: ({target: {dataset, value}}: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const SelectMenu: React.FC<smProps> = ({i, selected, optionLists, fields, handleChange}) =>
+const SelectMenu: React.FC<smProps> = ({idx, selected, optionLists, field, handleChange}) =>
 	<div className="form-group col-12 col-md-3 col-lg-2">
 		{/*TODO maybe use id attribute instead of dataset?*/}
 		<label className="mr-2"
-		       htmlFor={`product${fields[i]}`}>{`${fields[i].charAt(0).toUpperCase()}${fields[i].slice(1)}`}:</label>
-		<select required value={selected[i]}
+		       htmlFor={field}>{`${field.charAt(0).toUpperCase()}${field.slice(1)}`}:</label>
+		<select required value={selected[idx]}
 		        onChange={handleChange}
-		        data-select-field={fields[i]}
-		        data-select-index={i}
-		        id={`product${fields[i]}`}
+		        data-select-index={idx}
+		        id={field}
 		        className="form-control selectPet">
 			<option>select</option>
-			{optionLists && optionLists[i]}</select>
+			{optionLists && optionLists[idx]}</select>
 	</div>;
 
 export default SelectMenu

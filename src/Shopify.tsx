@@ -12,88 +12,89 @@ type Props = {
 
 const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 	const node = useRef<HTMLDivElement>(null);
-	useEffect(() => {
-		const ShopifyBuyInit = () => {
-			const ShopifyBuy = (window as Window).ShopifyBuy
-			const client = ShopifyBuy.buildClient({
-				domain: 'eden-equipment.myshopify.com',
-				storefrontAccessToken: '8f386bb8cf1bc975fc00683937b72d2d',
-			});
-			const shopifyProductId: string = filteredProductList[0].shopifyProductId;
-			ShopifyBuy.UI.onReady(client).then(function (ui: any) {
-				ui.createComponent('product', {
-					id: shopifyProductId,
-					node: node.current,
-					moneyFormat: '%24%7B%7Bamount%7D%7D',
-					options: {
-						"product": {
-							"layout": "horizontal",
-							"styles": {
-								"price": {
-									"font-size": "2rem"
-								},
-								"button": {
-									"text-transform": "uppercase",
-								},
-								"product": {
-									"text-align": "center",
-									"@media (min-width: 601px)": {
-										"margin-left": "20px",
-										"margin-bottom": "50px"
-									}
-								}
+	const ShopifyBuyInit = () => {
+		const ShopifyBuy = (window as Window).ShopifyBuy
+		const client = ShopifyBuy.buildClient({
+			domain: 'eden-equipment.myshopify.com',
+			storefrontAccessToken: '8f386bb8cf1bc975fc00683937b72d2d',
+		});
+		const shopifyProductId: string = filteredProductList[0].shopifyProductId;
+		ShopifyBuy.UI.onReady(client).then(function (ui: any) {
+			ui.createComponent('product', {
+				id: shopifyProductId,
+				node: node.current,
+				moneyFormat: '%24%7B%7Bamount%7D%7D',
+				options: {
+					"product": {
+						"layout": "horizontal",
+						"styles": {
+							"price": {
+								"font-size": "2rem"
 							},
-							"buttonDestination": "checkout",
-							"contents": {
-								"img": true,
-								"title": true,
-								"price": true
+							"button": {
+								"text-transform": "uppercase",
 							},
-							"text": {
-								"button": "Buy now"
-							}
-						},
-						"productSet": {
-							"styles": {
-								"products": {
-									"@media (min-width: 601px)": {
-										"margin-left": "-20px"
-									}
+							"product": {
+								"text-align": "center",
+								"@media (min-width: 601px)": {
+									"margin-left": "20px",
+									"margin-bottom": "50px"
 								}
 							}
 						},
-						"modalProduct": {
-							"contents": {
-								"img": false,
-								"imgWithCarousel": true,
-								"button": false,
-								"buttonWithQuantity": true
-							},
-							"styles": {
-								"product": {
-									"@media (min-width: 601px)": {
-										"max-width": "100%",
-										"margin-left": "0px",
-										"margin-bottom": "0px"
-									}
-								}
-							},
-							"text": {
-								"button": "Add to cart"
-							}
+						"buttonDestination": "checkout",
+						"contents": {
+							"img": true,
+							"title": true,
+							"price": true
 						},
-						"cart": {
-							"text": {
-								"total": "Subtotal",
-								"button": "Checkout"
+						"text": {
+							"button": "Buy now"
+						}
+					},
+					"productSet": {
+						"styles": {
+							"products": {
+								"@media (min-width: 601px)": {
+									"margin-left": "-20px"
+								}
 							}
 						}
 					},
-				});
+					"modalProduct": {
+						"contents": {
+							"img": false,
+							"imgWithCarousel": true,
+							"button": false,
+							"buttonWithQuantity": true
+						},
+						"styles": {
+							"product": {
+								"@media (min-width: 601px)": {
+									"max-width": "100%",
+									"margin-left": "0px",
+									"margin-bottom": "0px"
+								}
+							}
+						},
+						"text": {
+							"button": "Add to cart"
+						}
+					},
+					"cart": {
+						"text": {
+							"total": "Subtotal",
+							"button": "Checkout"
+						}
+					}
+				},
 			});
-		}
+		});
+	}
 
+	useEffect(() => {
 		const loadShopifyScript = () => {
+			// if script has already been loaded then just call the Buy Button method
 			if (window.ShopifyBuy) return ShopifyBuyInit();
 			const scriptURL: string = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
 			const script: HTMLScriptElement = document.createElement('script');
