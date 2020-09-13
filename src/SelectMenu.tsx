@@ -10,7 +10,6 @@ type smProps = {
 
 const SelectMenu: React.FC<smProps> = ({idx, selected, optionLists, field, handleChange}) =>
 	<div className="form-group col-12 col-md-3 col-lg-2">
-		{/*TODO maybe use id attribute instead of dataset?*/}
 		<label className="mr-2"
 		       htmlFor={field}>{`${field.charAt(0).toUpperCase()}${field.slice(1)}`}:</label>
 		<select required value={selected[idx]}
