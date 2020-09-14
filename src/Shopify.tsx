@@ -20,13 +20,13 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 		});
 		const shopifyProductId: string = filteredProductList[0].shopifyProductId;
 		ShopifyBuy.UI.onReady(client).then(function (ui: any) {
-			ui.createComponent('product', {
-				id: shopifyProductId,
+			ui.createComponent('productSet', {
+				id: [shopifyProductId],
 				node: node.current,
 				moneyFormat: '%24%7B%7Bamount%7D%7D',
 				options: {
 					"product": {
-						"layout": "horizontal",
+						"layout": "vertical",
 						"styles": {
 							"price": {
 								"font-size": "2rem"
@@ -91,7 +91,7 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 			});
 		});
 	}
-
+	//TODO use the NPM package instead!!
 	useEffect(() => {
 		const loadShopifyScript = () => {
 			// if script has already been loaded then just call the Buy Button method
