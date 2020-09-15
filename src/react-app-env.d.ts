@@ -6,3 +6,5 @@ type Product = {
 	shopifyProductId: string;
 	[key: string]: string;
 }
+
+declare module '@shopify/buy-button-js';

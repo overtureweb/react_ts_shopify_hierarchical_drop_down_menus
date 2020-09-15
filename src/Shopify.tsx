@@ -1,25 +1,22 @@
 import React, {useEffect, useRef} from "react";
-
-declare global {
-	interface Window {
-		ShopifyBuy: any;
-	}
-}
+import ShopifyBuy from "@shopify/buy-button-js";
 
 type Props = {
 	filteredProductList: Product[];
 }
 
 const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
+	const [filteredProduct] = filteredProductList;
+	const {shopifyProductId}: Product = filteredProduct;
 	const node = useRef<HTMLDivElement>(null);
-	const ShopifyBuyInit = () => {
-		const ShopifyBuy = (window as Window).ShopifyBuy
-		const client = ShopifyBuy.buildClient({
-			domain: 'eden-equipment.myshopify.com',
-			storefrontAccessToken: '8f386bb8cf1bc975fc00683937b72d2d',
-		});
-		const shopifyProductId: string = filteredProductList[0].shopifyProductId;
-		ShopifyBuy.UI.onReady(client).then(function (ui: any) {
+
+	useEffect(() => {
+		const ShopifyBuyInit = () => {
+			const client = ShopifyBuy.buildClient({
+				domain: 'eden-equipment.myshopify.com',
+				storefrontAccessToken: '8f386bb8cf1bc975fc00683937b72d2d',
+			});
+			const ui = ShopifyBuy.UI.init(client);
 			ui.createComponent('productSet', {
 				id: [shopifyProductId],
 				node: node.current,
@@ -89,23 +86,9 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 					}
 				},
 			});
-		});
-	}
-	//TODO use the NPM package instead!!
-	useEffect(() => {
-		const loadShopifyScript = () => {
-			// if script has already been loaded then just call the Buy Button method
-			if (window.ShopifyBuy) return ShopifyBuyInit();
-			const scriptURL: string = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-			const script: HTMLScriptElement = document.createElement('script');
-			script.async = true;
-			script.defer = true;
-			script.src = scriptURL;
-			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-			script.addEventListener("load", () => ShopifyBuyInit());
 		}
-		loadShopifyScript()
-	});
+		ShopifyBuyInit();
+	},[shopifyProductId]);
 
 	return <div ref={node} id="product-component-1597776212126"/>
 
