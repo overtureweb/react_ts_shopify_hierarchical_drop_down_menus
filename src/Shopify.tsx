@@ -8,7 +8,7 @@ type Props = {
 const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 	const [filteredProduct] = filteredProductList;
 	const {shopifyProductId}: Product = filteredProduct;
-	const node = useRef<HTMLDivElement>(null);
+	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const ShopifyBuyInit = () => {
@@ -19,7 +19,7 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 			const ui = ShopifyBuy.UI.init(client);
 			ui.createComponent('productSet', {
 				id: [shopifyProductId],
-				node: node.current,
+				node: ref.current,
 				moneyFormat: '%24%7B%7Bamount%7D%7D',
 				options: {
 					"product": {
@@ -90,7 +90,7 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 		ShopifyBuyInit();
 	},[shopifyProductId]);
 
-	return <div ref={node} id="product-component-1597776212126"/>
+	return <div ref={ref} id="product-component-1597776212126"/>
 
 }
 
