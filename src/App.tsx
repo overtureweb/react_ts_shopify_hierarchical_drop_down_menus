@@ -4,6 +4,7 @@ import "./App.scss";
 import Shopify from "./Shopify";
 import {v4 as uuidv4} from 'uuid';
 import SelectMenu from "./SelectMenu";
+import {Col, Container, Row} from "react-bootstrap";
 
 interface iDataSet extends DOMStringMap {
 	selectField: string;
@@ -20,8 +21,8 @@ type AppFil = {
 
 const App: React.FC<Props> = ({fields}) => {
 	const [isSubmitted, setIsSubmitted] = useState(false);
-	const [productList, setProductList] = useState();
-	const [optionLists, setOptionLists] = useState();
+	const [productList, setProductList] = useState([]);
+	const [optionLists, setOptionLists] = useState<Array<JSX.Element[]>>([]);
 	// need to keep track of the currently selected option, defaults to "select"
 	const [selected, setSelected] = useState(Array(fields.length).fill("select"));
 	const appliedFilters = useRef<AppFil>();
@@ -46,7 +47,7 @@ const App: React.FC<Props> = ({fields}) => {
 		const setOptions = () => {
 			if (!productList) return;
 			//generate the option list for the first drop-down
-			const optionsEls = [...new Set(productList.map((obj: Product) => obj[fields[0]])) as Set<number>].map((value, i): JSX.Element =>
+			const optionsEls: JSX.Element[] = [...new Set(productList.map((obj: Product) => obj[fields[0]]))].map((value, i): JSX.Element =>
 				<option key={`owd${i}`}>{value}</option>);
 			setOptionLists([optionsEls, [], []])
 		}
@@ -80,7 +81,7 @@ const App: React.FC<Props> = ({fields}) => {
 			Object.entries(appliedFilters.current!).every(([key, value]): boolean => product[key] === value));
 
 		//generate new options - create new option elements
-		setOptionLists((prevState: JSX.Element[]) => {
+		setOptionLists((prevState) => {
 			if (nextIndex >= fields.length) return [...prevState];
 			let prev = prevState.slice(0, nextIndex);
 			const optionsEls = [...new Set(filteredProductList.current!.map((obj: Product) => +obj[fields[nextIndex]])) as Set<number>]
@@ -103,29 +104,39 @@ const App: React.FC<Props> = ({fields}) => {
 	});
 
 	return (
-		<>
-			<form onSubmit={handleSubmit} className="hvac__search" id="form">
-				<div className="form-row justify-content-center">
-					{fields.map((field, idx) =>
-						<SelectMenu
-							idx={idx}
-							key={uuidv4()}
-							handleChange={handleChange}
-							field={field}
-							selected={selected}
-							optionLists={optionLists}
-						/>
-					)}
-					<div style={{whiteSpace: "nowrap"}} className="col-12 col-md-3 align-self-center pt-3 col-lg-3">
-						<Button disabled={selected.includes("select")} variant="primary" size="lg" className="mr-2"
-						        id="submit"
-						        type="submit">search</Button>
-						<Button onClick={handleReset} variant="warning" size="lg" id="reset" type="reset">reset</Button>
-					</div>
-				</div>
-			</form>
-			{isSubmitted && <Shopify filteredProductList={filteredProductList.current!}/>}
-		</>
+		<Container>
+			<Row className="justify-content-center mt-5 pt-5">
+				<Col>
+					<h1 className="text-center">Find Your Filter</h1>
+					<form onSubmit={handleSubmit} className="hvac__search" id="form">
+						<div className="form-row justify-content-center">
+							{fields.map((field, idx) =>
+								<SelectMenu
+									idx={idx}
+									key={uuidv4()}
+									handleChange={handleChange}
+									field={field}
+									selected={selected}
+									optionLists={optionLists}
+								/>
+							)}
+							<div style={{whiteSpace: "nowrap"}}
+							     className="col-12 col-md-3 align-self-center pt-3 col-lg-3">
+								<Button variant="primary"
+								        size="lg"
+									// uncomment the next line to constrain the user to select a value for all 3 fields
+									// disabled={selected.includes("select")}
+									    className="mr-2"
+									    id="submit"
+									    type="submit">search</Button>
+								<Button onClick={handleReset} variant="warning" size="lg" id="reset"
+								        type="reset">reset</Button>
+							</div>
+						</div>
+					</form>
+					{isSubmitted && <Shopify filteredProductList={filteredProductList.current!}/>}</Col>
+			</Row>
+		</Container>
 	)
 }
 

@@ -3,7 +3,7 @@ import React from "react";
 type smProps = {
 	idx: number;
 	selected: string[];
-	optionLists: JSX.Element[];
+	optionLists: Array<JSX.Element[]>;
 	field: string;
 	handleChange: ({target: {dataset, value}}: React.ChangeEvent<HTMLSelectElement>) => void;
 }
