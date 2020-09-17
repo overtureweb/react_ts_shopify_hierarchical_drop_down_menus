@@ -1,4 +1,4 @@
-#React/Shopify Hierarchical Select Menus
+# React/Shopify Hierarchical Select Menus
 
 This project is a working example of a series of hierarchical HTML select menus used to narrow a product search to a single item. This example uses the product dimensions as the search criteria. Once all the options have been chosen the user clicks the submit button and the product ID is passed to the Shopify script which returns and displays the appropriate product with a buy now button.
 
@@ -7,7 +7,7 @@ https://www.overtureweb.com/react-shopify-hierarchical-select-menus
 
 Please note this library is provided “as-is” with limited support. We are available to adapt and integrate this library into your project and for broader development needs. For more information contact us [here](https://www.overtureweb.com/contact-us/).
 
-###Requirements
+### Requirements
 
 **React/Typescript**  
 This project uses the React library with Typescript and was initialized using Create React App.
