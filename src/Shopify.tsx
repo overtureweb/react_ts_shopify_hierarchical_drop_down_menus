@@ -3,17 +3,18 @@ import ShopifyBuy from "@shopify/buy-button-js";
 
 type Props = {
 	filteredProductList: Product[];
+	shopifyCredentials: ShopifyCredentials;
 }
 
-const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
+const Shopify: React.FC<Props> = ({filteredProductList, shopifyCredentials: {domain, storefrontAccessToken}}): JSX.Element => {
 	const productIds = filteredProductList.map(({shopifyProductId}) => shopifyProductId);
 	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const ShopifyBuyInit = () => {
 			const client = ShopifyBuy.buildClient({
-				domain: 'eden-equipment.myshopify.com',
-				storefrontAccessToken: '8f386bb8cf1bc975fc00683937b72d2d',
+				domain,
+				storefrontAccessToken
 			});
 			const ui = ShopifyBuy.UI.init(client);
 			ui.createComponent('productSet', {
@@ -87,7 +88,7 @@ const Shopify: React.FC<Props> = ({filteredProductList}): JSX.Element => {
 			});
 		}
 		ShopifyBuyInit();
-	}, [productIds]);
+	}, [productIds, domain, storefrontAccessToken]);
 
 	return <div ref={ref} id="product-component-1597776212126"/>
 }

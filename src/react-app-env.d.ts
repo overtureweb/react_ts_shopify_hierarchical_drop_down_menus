@@ -7,4 +7,9 @@ type Product = {
 	[key: string]: string;
 }
 
+type ShopifyCredentials = {
+	domain: string;
+	storefrontAccessToken: string;
+}
+
 declare module '@shopify/buy-button-js';

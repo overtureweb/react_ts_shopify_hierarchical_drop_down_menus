@@ -5,10 +5,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App fields={["height", "width", "depth"]} />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<App
+			fields={["height", "width", "depth"]}
+			shopifyCredentials={{
+				domain: "eden-equipment.myshopify.com",
+				storefrontAccessToken: "8f386bb8cf1bc975fc00683937b72d2d"
+			}}/>
+	</React.StrictMode>,
+	document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -16,7 +16,7 @@ const SelectMenu: React.FC<smProps> = ({idx, selected, optionLists, field, handl
 		        onChange={handleChange}
 		        data-select-index={idx}
 		        id={field}
-		        className="form-control selectPet">
+		        className="form-control">
 			<option>select</option>
 			{optionLists && optionLists[idx]}</select>
 	</div>;

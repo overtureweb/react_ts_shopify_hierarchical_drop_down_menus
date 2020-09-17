@@ -13,13 +13,14 @@ interface iDataSet extends DOMStringMap {
 
 type Props = {
 	fields: string[];
+	shopifyCredentials: ShopifyCredentials;
 }
 
 type AppFil = {
 	[key: string]: string;
 }
 
-const App: React.FC<Props> = ({fields}) => {
+const App: React.FC<Props> = ({fields, shopifyCredentials}) => {
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [productList, setProductList] = useState([]);
 	const [optionLists, setOptionLists] = useState<Array<JSX.Element[]>>([]);
@@ -134,7 +135,7 @@ const App: React.FC<Props> = ({fields}) => {
 							</div>
 						</div>
 					</form>
-					{isSubmitted && <Shopify filteredProductList={filteredProductList.current!}/>}</Col>
+					{isSubmitted && <Shopify filteredProductList={filteredProductList.current!} shopifyCredentials={shopifyCredentials}/>}</Col>
 			</Row>
 		</Container>
 	)
