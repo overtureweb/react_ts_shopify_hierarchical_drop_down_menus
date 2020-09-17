@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Bitnami" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="Bitnami">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/react-shopify-hierarchical-select-menus" local="$PROJECT_DIR$/build/" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
