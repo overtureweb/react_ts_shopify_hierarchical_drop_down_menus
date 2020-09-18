@@ -16,7 +16,7 @@ type Props = {
 	shopifyCredentials: ShopifyCredentials;
 }
 
-type AppFil = {
+type AppliedFilters = {
 	[key: string]: string;
 }
 
@@ -26,7 +26,7 @@ const App: React.FC<Props> = ({fields, shopifyCredentials}) => {
 	const [optionLists, setOptionLists] = useState<Array<JSX.Element[]>>([]);
 	// need to keep track of the currently selected option, defaults to "select"
 	const [selected, setSelected] = useState(Array(fields.length).fill("select"));
-	const appliedFilters = useRef<AppFil>();
+	const appliedFilters = useRef<AppliedFilters>();
 	const filteredProductList = useRef<Product[]>();
 
 	// called once to get the product data
