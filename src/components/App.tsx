@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef, ChangeEvent, FormEvent} from 'react';
 import Button from 'react-bootstrap/Button';
-import "./App.scss";
 import Shopify from "./Shopify";
 import {v4 as uuidv4} from 'uuid';
 import SelectMenu from "./SelectMenu";
